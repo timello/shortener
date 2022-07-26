@@ -30,7 +30,7 @@ jobs:
         with:
           aws-region: eu-central-1
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID_DEV }}:role/githubOIDCCDKDeployerRole
-          role-session-name: terraformOIDECRDeployerRole
+          role-session-name: githubOIDCCDKDeployerRole
 
       - run: aws sts get-caller-identity
 
