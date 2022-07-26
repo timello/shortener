@@ -37,10 +37,13 @@ jobs:
 
       - run: aws sts get-caller-identity
 
-      - name: Install dependencies
-        run: yarn
+      - name: install npm
+        run: 'sudo apt update -y && sudo apt install nodejs npm -y'
+
+      - name: install AWS CDK
+        run: 'sudo npm install -g aws-cdk'
 
       - name: Build lambda and deploy
         run: |
           make build
-          (cd deploy/aws-cdk/shortener; yarn cdk synth)
+          (cd deploy/aws-cdk/shortener; cdk synth)
