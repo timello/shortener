@@ -21,6 +21,9 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
 
       - name: go test
         run: make test
@@ -34,29 +37,10 @@ jobs:
 
       - run: aws sts get-caller-identity
 
+      - name: Install dependencies
+        run: yarn
+
       - name: Build lambda and deploy
         run: |
           make build
-
-      - name: cdk diff
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'diff'
-          actions_comment: true
-          working_dir: 'deploy/aws-cdk/shortener'
-
-      - name: cdk deploy
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'deploy'
-          cdk_stack: 'stack1'
-          cdk_args: '--require-approval never'
-          actions_comment: false
-          working_dir: 'deploy/aws-cdk/shortener'
-
-      - name: cdk synth
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'synth'
-          cdk_version: '1.16.2'
-          working_dir: 'deploy/aws-cdk/shortener'
+          (cd deploy/aws-cdk/shortener; yarn cdk synth)
