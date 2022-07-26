@@ -48,7 +48,7 @@ jobs:
           make build
 
       - name: cdk deploy
-        working-directory: ./deploy/aws-cdk/shortener
+        working-directory: /home/runner/work/shortener/deploy/aws-cdk/shortener
         run: |
           pwd
           ls -l
