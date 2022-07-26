@@ -49,4 +49,6 @@ jobs:
 
       - name: cdk deploy
         working-directory: ./deploy/aws-cdk/shortener
-        run: cdk deploy
+        run: |
+          pwd
+          cdk deploy
