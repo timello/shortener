@@ -48,5 +48,5 @@ jobs:
           make build
 
       - name: cdk deploy
-        run: cdk deploy
         working-directory: ./deploy/aws-cdk/shortener
+        run: cdk deploy
