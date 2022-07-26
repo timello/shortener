@@ -46,5 +46,7 @@ jobs:
       - name: Build lambda and deploy
         run: |
           make build
-          cd deploy/aws-cdk/shortener
-          cdk synth
+
+      - name: cdk deploy
+        run: cdk synth
+        working-directory: deploy/aws-cdk/shortener
