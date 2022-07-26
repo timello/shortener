@@ -5,6 +5,7 @@ import (
 	"github.com/aws/jsii-runtime-go"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigateway"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsdynamodb"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/constructs-go/constructs/v10"
 	// "github.com/aws/jsii-runtime-go"
@@ -23,15 +24,30 @@ func NewShortenerStack(scope constructs.Construct, id string, props *ShortenerSt
 
 	// The code that defines your stack goes here
 
-	fn := awslambda.NewFunction(stack, jsii.String("URLShortener"), &awslambda.FunctionProps{
+	fn := awslambda.NewFunction(stack, jsii.String("urlShortenerFunc"), &awslambda.FunctionProps{
 		FunctionName: jsii.String("URLShortenerHandler"),
 		Runtime:      awslambda.Runtime_GO_1_X(),
 		Code:         awslambda.AssetCode_FromAsset(jsii.String("../../../bin/urlshortener.zip"), nil),
 		Handler:      jsii.String("urlshortener"),
 	})
 
-	awsapigateway.NewLambdaRestApi(stack, jsii.String("urlshortener"), &awsapigateway.LambdaRestApiProps{
+	awsapigateway.NewLambdaRestApi(stack, jsii.String("urlShortenerFuncAPI"), &awsapigateway.LambdaRestApiProps{
 		Handler: fn,
+	})
+
+	table := awsdynamodb.NewTable(stack, jsii.String("urlShortenerFuncTable"), &awsdynamodb.TableProps{
+		PartitionKey: &awsdynamodb.Attribute{
+			Name: jsii.String("key"),
+			Type: awsdynamodb.AttributeType_STRING,
+		},
+	})
+
+	table.AddGlobalSecondaryIndex(&awsdynamodb.GlobalSecondaryIndexProps{
+		IndexName: jsii.String("TargetURLIndex"),
+		PartitionKey: &awsdynamodb.Attribute{
+			Name: jsii.String("targetURL"),
+			Type: awsdynamodb.AttributeType_STRING,
+		},
 	})
 
 	// example resource
