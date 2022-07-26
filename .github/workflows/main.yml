@@ -51,4 +51,5 @@ jobs:
         working-directory: ./deploy/aws-cdk/shortener
         run: |
           pwd
+          ls -l
           cdk deploy
